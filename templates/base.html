@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" data-root="{{ root }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ site_title }}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ root }}static/style.css">
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a class="site-title" href="{{ root }}index.html">{{ site_title }}</a>
+    <nav class="nav-links">
+      <a href="{{ root }}index.html">Tweets</a>
+      <a href="{{ root }}search.html">Search</a>
+    </nav>
+  </div>
+</header>
+<main>
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>

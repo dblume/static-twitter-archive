@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}{{ site_title }} — Page {{ page_num }}{% endblock %}
+{% block content %}
+{% for tweet in tweets %}
+<article class="tweet-card{% if tweet.is_rt %} is-rt{% endif %}">
+  <div class="tweet-header">
+    <img class="avatar" src="{{ root }}static/avatar.png" alt="{{ display_name }}">
+    <div class="tweet-author">
+      <span class="display-name">{{ display_name }}</span>
+      <span class="screen-name">@{{ screen_name }}</span>
+    </div>
+    {% if tweet.is_rt %}<span class="rt-label">&#x1F501; RT</span>{% endif %}
+  </div>
+  <div class="tweet-body">{{ tweet.body_html | safe }}</div>
+  {% if tweet.media %}
+  <div class="tweet-media count-{{ tweet.media | length }}">
+    {% for m in tweet.media %}
+    <div class="media-item">
+      {% set msrc = (root + m.url) if m.is_local else m.url %}
+      {% if m.type == 'video' or m.type == 'animated_gif' %}
+      <video src="{{ msrc }}" controls preload="none"{% if m.type == 'animated_gif' %} loop muted autoplay{% endif %}></video>
+      {% else %}
+      <img src="{{ msrc }}" alt="Tweet media" loading="lazy">
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="tweet-footer">
+    <span class="tweet-date"><a href="{{ root }}status/{{ tweet.id }}">{{ tweet.date_display }}</a><span class="tweet-original"> &#8728; <a href="https://x.com/{{ screen_name }}/status/{{ tweet.id }}">Original</a></span></span>
+    {% if tweet.favorite_count > 0 or tweet.retweet_count > 0 %}
+    <span class="tweet-stats">
+      {% if tweet.retweet_count > 0 %}<span>&#x1F501; {{ tweet.retweet_count }}</span>{% endif %}
+      {% if tweet.favorite_count > 0 %}<span>&#x2665; {{ tweet.favorite_count }}</span>{% endif %}
+    </span>
+    {% endif %}
+  </div>
+</article>
+{% endfor %}
+
+<nav class="pagination" aria-label="Page navigation">
+  {% if page_num > 1 %}
+    {% if page_num == 2 %}
+    <a id="page-prev" href="{{ root }}index.html">&laquo; Newer</a>
+    {% else %}
+    <a id="page-prev" href="{{ root }}page/{{ page_num - 1 }}.html">&laquo; Newer</a>
+    {% endif %}
+  {% endif %}
+
+  {% for p in page_range %}
+    {% if p == -1 %}
+    <span class="ellipsis">&hellip;</span>
+    {% elif p == page_num %}
+    <span class="current">{{ p }}</span>
+    {% elif p == 1 %}
+    <a href="{{ root }}index.html">1</a>
+    {% else %}
+    <a href="{{ root }}page/{{ p }}.html">{{ p }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if page_num < total_pages %}
+  <a id="page-next" href="{{ root }}page/{{ page_num + 1 }}.html">Older &raquo;</a>
+  {% endif %}
+</nav>
+<script src="{{ root }}static/page.js"></script>
+{% endblock %}

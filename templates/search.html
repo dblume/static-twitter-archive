@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Search — {{ site_title }}{% endblock %}
+{% block content %}
+<h1 class="page-heading">Search Tweets</h1>
+<div class="search-container">
+  <input
+    id="search-input"
+    class="search-input"
+    type="search"
+    placeholder="Search {{ tweet_count }} tweets…"
+    autofocus
+    autocomplete="off"
+    spellcheck="false"
+  >
+</div>
+<p id="search-status" class="search-status"></p>
+<div id="search-results"></div>
+<script src="{{ root }}static/search.js"></script>
+{% endblock %}

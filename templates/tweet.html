@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Tweet by {{ author }} — {{ site_title }}{% endblock %}
+{% block content %}
+<div class="tweet-detail">
+  <a class="back-link" href="{{ root }}index.html">&#x2190; Back to tweets</a>
+
+  <article class="tweet-card{% if tweet.is_rt %} is-rt{% endif %}">
+    <div class="tweet-header">
+      <img class="avatar" src="{{ root }}static/avatar.png" alt="{{ display_name }}">
+      <div class="tweet-author">
+        <span class="display-name">{{ display_name }}</span>
+        <span class="screen-name">@{{ screen_name }}</span>
+      </div>
+      {% if tweet.is_rt %}<span class="rt-label">&#x1F501; RT</span>{% endif %}
+    </div>
+    <div class="tweet-body">{{ tweet.body_html | safe }}</div>
+    {% if tweet.media %}
+    <div class="tweet-media count-{{ tweet.media | length }}">
+      {% for m in tweet.media %}
+      <div class="media-item">
+        {% set msrc = (root + m.url) if m.is_local else m.url %}
+        {% if m.type == 'video' or m.type == 'animated_gif' %}
+        <video src="{{ msrc }}" controls preload="none"{% if m.type == 'animated_gif' %} loop muted autoplay{% endif %}></video>
+        {% else %}
+        <img src="{{ msrc }}" alt="Tweet media">
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="tweet-footer">
+      <span class="tweet-date">{{ tweet.date_display }}<span class="tweet-original"> &#8728; <a href="https://x.com/{{ screen_name }}/status/{{ tweet.id }}">Original</a></span></span>
+      {% set has_right = tweet.favorite_count > 0 or tweet.retweet_count > 0 or tweet.in_reply_to_id %}
+      {% if has_right %}
+      <span class="tweet-stats">
+        {% if tweet.in_reply_to_id %}
+        <span>&#x21A9; <a href="https://x.com/{{ tweet.in_reply_to_screen_name }}/status/{{ tweet.in_reply_to_id }}">@{{ tweet.in_reply_to_screen_name }}</a></span>
+        {% endif %}
+        {% if tweet.retweet_count > 0 %}<span>&#x1F501; {{ tweet.retweet_count }}</span>{% endif %}
+        {% if tweet.favorite_count > 0 %}<span>&#x2665; {{ tweet.favorite_count }}</span>{% endif %}
+      </span>
+      {% endif %}
+    </div>
+  </article>
+
+  {% if replies %}
+  <section class="thread-section">
+    <h2>{{ replies | length }} repl{{ 'y' if replies | length == 1 else 'ies' }} in archive</h2>
+    {% for reply in replies %}
+    <article class="tweet-card">
+      <div class="tweet-header">
+        <img class="avatar" src="{{ root }}static/avatar.png" alt="{{ display_name }}">
+        <div class="tweet-author">
+          <span class="display-name">{{ display_name }}</span>
+          <span class="screen-name">@{{ screen_name }}</span>
+        </div>
+      </div>
+      <div class="tweet-body">{{ reply.body_html | safe }}</div>
+      {% if reply.media %}
+      <div class="tweet-media count-{{ reply.media | length }}">
+        {% for m in reply.media %}
+        <div class="media-item">
+          {% set msrc = (root + m.url) if m.is_local else m.url %}
+          {% if m.type == 'video' or m.type == 'animated_gif' %}
+          <video src="{{ msrc }}" controls preload="none"></video>
+          {% else %}
+          <img src="{{ msrc }}" alt="Tweet media" loading="lazy">
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="tweet-footer">
+        <span class="tweet-date"><a href="{{ root }}status/{{ reply.id }}">{{ reply.date_display }}</a></span>
+      </div>
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <nav class="status-nav">
+    {% if prev_id %}
+    <a id="status-prev" href="{{ root }}status/{{ prev_id }}">&larr; Newer</a>
+    {% else %}
+    <span class="status-nav-disabled">&larr; Newer</span>
+    {% endif %}
+    {% if next_id %}
+    <a id="status-next" class="status-nav-next" href="{{ root }}status/{{ next_id }}">Older &rarr;</a>
+    {% else %}
+    <span class="status-nav-next status-nav-disabled">Older &rarr;</span>
+    {% endif %}
+  </nav>
+</div>
+<script src="{{ root }}static/status.js"></script>
+{% endblock %}

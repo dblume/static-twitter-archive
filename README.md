@@ -7,6 +7,8 @@
 A static site generator that turns a Twitter/X data export into a browsable,
 searchable website — no server required.
 
+For example, see [my Twitter archive](https://david.dlma.com/lifestream/twitter/). 
+
 ## Background
 
 Twitter/X lets you download a full archive of your account data:
@@ -80,9 +82,16 @@ output/
 - **Swipe navigation** — swipe left/right on touch devices to move between
   pages or tweets
 
-### Is it any good?
+## Is it any good?
 
 [Yes](https://news.ycombinator.com/item?id=3067434).
+
+## But...
+
+The Twitter archive generated from the official data export is pretty bad.
+It truncates lots of tweets, doesn't include media files, and doesn't preserve threading.
+
+Improvements could be made.
 
 ## License
 

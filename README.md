@@ -15,8 +15,11 @@ Twitter/X lets you download a full archive of your account data:
 
 More > Settings and privacy > Your account > Download an archive of your data
 
-Once the archive is downloaded and extracted into this directory, `generate.py`
-reads the data files and produces a self-contained static website in `output/`.
+Once the archive's tarball is downloaded and extracted, you can navigate into
+the archive's `data/` directory.
+
+Install this project directly in the `data/` directory. `generate.py` can then
+read the data files and produces a self-contained static website in `output/`.
 
 ## Input files
 

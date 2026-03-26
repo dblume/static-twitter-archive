@@ -2,7 +2,7 @@
 {% block title %}Tweet by {{ author }} — {{ site_title }}{% endblock %}
 {% block content %}
 <div class="tweet-detail">
-  <a class="back-link" href="{{ root }}index.html">&#x2190; Back to tweets</a>
+  <a class="back-link" href="{{ back_url }}">&#x2190; Back to tweets</a>
 
   <article class="tweet-card{% if tweet.is_rt %} is-rt{% endif %}">
     <div class="tweet-header">

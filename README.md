@@ -80,7 +80,7 @@ output/
   index on first use
 - **Keyboard navigation** — on both timeline and tweet pages:
   - Arrow keys
-  - `h`/`l` or `k`/`j` (vim-style)
+  - `h`/`l` or `k`/`j` or `p`/`n` (vim-style)
   - `a`/`d` or `w`/`s` (WASD gaming-style)
 - **Swipe navigation** — swipe left/right on touch devices to move between
   pages or tweets

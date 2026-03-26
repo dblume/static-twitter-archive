@@ -2,7 +2,7 @@
 {% block title %}{{ site_title }} — Page {{ page_num }}{% endblock %}
 {% block content %}
 {% for tweet in tweets %}
-<article class="tweet-card{% if tweet.is_rt %} is-rt{% endif %}">
+<article id="{{ tweet.id }}" class="tweet-card{% if tweet.is_rt %} is-rt{% endif %}">
   <div class="tweet-header">
     <img class="avatar" src="{{ root }}static/avatar.png" alt="{{ display_name }}">
     <div class="tweet-author">
@@ -41,9 +41,9 @@
 <nav class="pagination" aria-label="Page navigation">
   {% if page_num > 1 %}
     {% if page_num == 2 %}
-    <a id="page-prev" href="{{ root }}index.html">&laquo; Newer</a>
+    <a id="page-prev" href="{{ root }}index.html#{{ prev_last_id }}">&laquo; Newer</a>
     {% else %}
-    <a id="page-prev" href="{{ root }}page/{{ page_num - 1 }}.html">&laquo; Newer</a>
+    <a id="page-prev" href="{{ root }}page/{{ page_num - 1 }}.html#{{ prev_last_id }}">&laquo; Newer</a>
     {% endif %}
   {% endif %}
 

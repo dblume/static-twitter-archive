@@ -22,9 +22,9 @@
   document.addEventListener('keydown', function (e) {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'h' || e.key === 'k' || e.key === 'a' || e.key === 'w') {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'h' || e.key === 'k' || e.key === 'a' || e.key === 'w' || e.key === 'p') {
       if (prev) window.location = prev.href;
-    } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'j' || e.key === 'l' || e.key === 's' || e.key === 'd') {
+    } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'j' || e.key === 'l' || e.key === 's' || e.key === 'd' || e.key === 'n') {
       if (next) window.location = next.href;
     }
   });

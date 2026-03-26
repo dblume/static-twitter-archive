@@ -308,11 +308,12 @@ def render_index_pages(env, tweets):
         chunk = tweets[start:start + TWEETS_PER_PAGE]
         root = '' if page_num == 1 else '../'
         ctx = {
-            'tweets':       chunk,
-            'page_num':     page_num,
-            'total_pages':  total_pages,
-            'page_range':   make_page_range(page_num, total_pages),
-            'root':         root,
+            'tweets':           chunk,
+            'page_num':         page_num,
+            'total_pages':      total_pages,
+            'page_range':       make_page_range(page_num, total_pages),
+            'root':             root,
+            'prev_last_id':     tweets[start - 1]['id'] if page_num > 1 else None,
         }
         html_out = tmpl.render(**ctx)
         if page_num == 1:
@@ -330,6 +331,11 @@ def render_tweet_pages(env, tweets, reply_map):
     tmpl = env.get_template('tweet.html')
     for i, tweet in enumerate(tweets):
         replies = reply_map.get(tweet['id'], [])
+        page_num = i // TWEETS_PER_PAGE + 1
+        if page_num == 1:
+            back_url = '../index.html#' + tweet['id']
+        else:
+            back_url = f'../page/{page_num}.html#' + tweet['id']
         ctx = {
             'tweet':      tweet,
             'replies':    replies,
@@ -337,6 +343,7 @@ def render_tweet_pages(env, tweets, reply_map):
             'next_id':    tweets[i + 1]['id'] if i < len(tweets) - 1 else None,
             'author':     env.globals['screen_name'],
             'root':       '../',
+            'back_url':   back_url,
         }
         html_out = tmpl.render(**ctx)
         (OUTPUT_DIR / 'status' / tweet["id"]).write_text(html_out, encoding='utf-8')

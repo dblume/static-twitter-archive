@@ -93,6 +93,15 @@ def make_body_html(tweet):
     text = tweet.get('full_text', '')
     entities = tweet.get('entities', {})
 
+    def tw_to_py(tw_target):
+        """Convert a Twitter entity index to a Python string index.
+        Twitter archive counts \\n as 2 chars; json.loads yields 1 char."""
+        py, tw = 0, 0
+        while tw < tw_target and py < len(text):
+            tw += 2 if text[py] == '\n' else 1
+            py += 1
+        return py
+
     # Media URLs appear as t.co links at end of text — we strip them
     # (we show images/videos separately)
     media_urls = set()
@@ -105,7 +114,7 @@ def make_body_html(tweet):
     spans = []
 
     for u in entities.get('urls', []):
-        s, e = int(u['indices'][0]), int(u['indices'][1])
+        s, e = tw_to_py(int(u['indices'][0])), tw_to_py(int(u['indices'][1]))
         if u['url'] in media_urls:
             spans.append((s, e, ''))
         else:
@@ -114,11 +123,11 @@ def make_body_html(tweet):
             spans.append((s, e, f'<a href="{href}">{disp}</a>'))
 
     for m in entities.get('media', []):
-        s, e = int(m['indices'][0]), int(m['indices'][1])
+        s, e = tw_to_py(int(m['indices'][0])), tw_to_py(int(m['indices'][1]))
         spans.append((s, e, ''))
 
     for mention in entities.get('user_mentions', []):
-        s, e = int(mention['indices'][0]), int(mention['indices'][1])
+        s, e = tw_to_py(int(mention['indices'][0])), tw_to_py(int(mention['indices'][1]))
         sn = html.escape(mention['screen_name'])
         spans.append((s, e, f'<a href="https://x.com/{sn}">@{sn}</a>'))
 
